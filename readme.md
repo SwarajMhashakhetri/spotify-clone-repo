@@ -11,6 +11,6 @@ Welcome to the Spotify Clone project! This project aims to replicate some of the
 
 ## Technologies Used
 
-- HTML,CSS,JAVASCRIPT
+- HTML , CSS , JAVASCRIPT
 
 
