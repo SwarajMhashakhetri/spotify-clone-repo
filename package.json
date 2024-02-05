@@ -1,0 +1,14 @@
+{
+  "name": "spotify-clone-repo",
+  "version": "1.0.0",
+  "description": "Welcome to the Spotify Clone project! This project aims to replicate some of the core features of the popular music streaming service, Spotify.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "swaraj",
+  "license": "ISC",
+  "dependencies": {
+    "fs": "^0.0.1-security"
+  }
+}

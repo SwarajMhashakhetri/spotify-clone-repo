@@ -18,8 +18,9 @@ function secondsToMinutesSeconds(seconds) {
 
 async function getSongs(folder) {
     currFolder = folder;
-    console.log(currFolder);
     let a = await fetch(`http://127.0.0.1:5500/${folder}/`)
+    let songsDIR = await fetch("http://127.0.0.1:5500/songs")
+    // console.log(songsDIR);
     let response = await a.text();
     let div = document.createElement("div")
     div.innerHTML = response;
@@ -72,7 +73,7 @@ const playMusic = (track, pause = false) => {
 
 }
 
-async function displayAlbums(album) {
+async function onlyAlbum(){
     let a = await fetch(`http://127.0.0.1:5500/songs/`)
     let response = await a.text();
     let div = document.createElement("div")
@@ -80,10 +81,38 @@ async function displayAlbums(album) {
     let anchors = div.getElementsByTagName("a")
     let cardContainer = document.querySelector(".cardContainer")
     let array = Array.from(anchors)
+    var names_array = []
     for (let index = 0; index < array.length; index++) {
         const e = array[index]; 
         if (e.href.includes("/songs") && !e.href.includes(".htaccess")) {
             let folder = e.href.split("/").slice(-1)[0]
+      
+            names_array.push(folder)
+    
+        }
+        
+    }
+    delete names_array[0]
+    console.log(names_array);
+    return names_array
+}
+
+async function displayAlbums(album) {
+    let a = await fetch(`http://127.0.0.1:5500/songs/`)
+    let response = await a.text();
+    // console.log(response);
+    let div = document.createElement("div")
+    div.innerHTML = response;
+    let anchors = div.getElementsByTagName("a")
+    let cardContainer = document.querySelector(".cardContainer")
+    let array = Array.from(anchors)
+    // var names_array = []
+    for (let index = 0; index < array.length; index++) {
+        const e = array[index]; 
+        if (e.href.includes("/songs") && !e.href.includes(".htaccess")) {
+            let folder = e.href.split("/").slice(-1)[0]
+      
+            // names_array.push(folder)
 
             
             // Get the metadata of the folder
@@ -91,7 +120,7 @@ async function displayAlbums(album) {
             let a = await fetch(`http://127.0.0.1:5500/songs/${album}/info.json`)
             let response = await a.json(); 
                     if (!document.querySelector(`.card[data-folder="${album}"]`)) {
-                cardContainer.innerHTML += ` <div data-folder="${album}" class="card">
+                cardContainer.innerHTML += ` <div  data-folder="${album}" class="card">
                 <div class="play">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
                         xmlns="http://www.w3.org/2000/svg">
@@ -105,7 +134,10 @@ async function displayAlbums(album) {
                 </div>`;
             }
         }
+        
     }
+    // delete names_array[0]
+    // console.log(names_array);
 
     // Load the playlist whenever card is clicked
     Array.from(document.getElementsByClassName("card")).forEach(e => { 
@@ -124,8 +156,13 @@ async function main() {
     playMusic(songs[0], true)
 
     // Display all the albums on the page
-    await displayAlbums("fav")
-    await displayAlbums("unfav")
+    var album_names = await onlyAlbum();
+    
+    album_names.forEach((x)=>{return displayAlbums(x)})
+
+
+    // await displayAlbums()
+    // await displayAlbums()
 
 
     // Attach an event listener to play, next and previous

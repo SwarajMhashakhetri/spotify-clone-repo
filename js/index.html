@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Display Folders with Vanilla JS</title>
+</head>
+<body>
+  <input type="file" id="folderInput" webkitdirectory directory />
+  <ul id="folderList"></ul>
+
+  <script>
+    document.getElementById('folderInput').addEventListener('change', handleFolderSelection);
+
+    function handleFolderSelection(event) {
+      const folderList = document.getElementById('folderList');
+      folderList.innerHTML = ''; // Clear previous results
+
+      const files = event.target.files;
+
+      for (const file of files) {
+        if (file.isDirectory) {
+          const folderName = file.webkitRelativePath.split('/')[0];
+          const listItem = document.createElement('li');
+          listItem.textContent = folderName;
+          folderList.appendChild(listItem);
+        }
+      }
+    }
+  </script>
+</body>
+</html>
