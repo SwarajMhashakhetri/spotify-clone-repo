@@ -93,28 +93,22 @@ async function onlyAlbum(){
         
     }
     delete names_array[0]
-    console.log(names_array);
     return names_array
 }
 
 async function displayAlbums(album) {
     let a = await fetch(`http://127.0.0.1:5500/songs/`)
     let response = await a.text();
-    // console.log(response);
     let div = document.createElement("div")
     div.innerHTML = response;
     let anchors = div.getElementsByTagName("a")
     let cardContainer = document.querySelector(".cardContainer")
     let array = Array.from(anchors)
-    // var names_array = []
     for (let index = 0; index < array.length; index++) {
         const e = array[index]; 
         if (e.href.includes("/songs") && !e.href.includes(".htaccess")) {
             let folder = e.href.split("/").slice(-1)[0]
-      
-            // names_array.push(folder)
 
-            
             // Get the metadata of the folder
 
             let a = await fetch(`http://127.0.0.1:5500/songs/${album}/info.json`)
@@ -136,13 +130,11 @@ async function displayAlbums(album) {
         }
         
     }
-    // delete names_array[0]
-    // console.log(names_array);
+    
 
     // Load the playlist whenever card is clicked
     Array.from(document.getElementsByClassName("card")).forEach(e => { 
         e.addEventListener("click", async item => {
-            console.log("Fetching Songs")
             songs = await getSongs(`songs/${item.currentTarget.dataset.folder}`)  
             playMusic(songs[0])
 
@@ -159,11 +151,6 @@ async function main() {
     var album_names = await onlyAlbum();
     
     album_names.forEach((x)=>{return displayAlbums(x)})
-
-
-    // await displayAlbums()
-    // await displayAlbums()
-
 
     // Attach an event listener to play, next and previous
     play.addEventListener("click", () => {
